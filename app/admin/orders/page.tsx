@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import LogoutButton from "../LogoutButton";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Orders — Admin" };
+export const metadata = { title: "Orders — Admin", robots: { index: false } };
 
 const STATUS_COLORS: Record<string, string> = {
   PENDING: "bg-yellow-100 text-yellow-700",
@@ -31,8 +31,8 @@ export default async function AdminOrdersPage() {
       {orders.length === 0 ? (
         <p className="text-gray-500 text-sm">No orders yet.</p>
       ) : (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-x-auto">
+          <table className="w-full text-sm min-w-[600px]">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
                 <th className="text-left px-4 py-3 font-semibold text-gray-600">Reference</th>

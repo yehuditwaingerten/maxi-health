@@ -2,7 +2,7 @@ import Link from "next/link";
 
 type Props = { searchParams: { ref?: string } };
 
-export const metadata = { title: "Order Confirmed — Maxi Health" };
+export const metadata = { title: "Order Confirmed" };
 
 export default function OrderConfirmedPage({ searchParams }: Props) {
   const ref = searchParams.ref;
