@@ -15,8 +15,16 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Maxi Health — Vitamins & Supplements",
+  title: {
+    default: "Maxi Health — Vitamins & Supplements",
+    template: "%s | Maxi Health",
+  },
   description: "Premium vitamins and supplements delivered to your door. Cash on delivery.",
+  openGraph: {
+    siteName: "Maxi Health",
+    type: "website",
+    locale: "he_IL",
+  },
 };
 
 export default function RootLayout({

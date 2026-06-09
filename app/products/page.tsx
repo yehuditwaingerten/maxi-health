@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import ProductCard from "@/components/ProductCard";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Products — Maxi Health" };
+export const metadata = { title: "Products" };
 
 export default async function ProductsPage() {
   const products = await prisma.product.findMany({ orderBy: { category: "asc" } });
