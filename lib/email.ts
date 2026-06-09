@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import { env } from "@/lib/env";
-import type { Order, OrderItem, Product } from "@/app/generated/prisma";
+import type { Order, OrderItem, Product } from "@/app/generated/prisma/client";
 
 type OrderWithItems = Order & {
   items: (OrderItem & { product: Product })[];
