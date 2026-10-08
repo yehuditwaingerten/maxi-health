@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
   const session = request.cookies.get("admin_session")?.value;
+  const secret = process.env.ADMIN_SESSION_SECRET;
 
-  if (!session || session !== "1") {
-    // Redirect to the admin login page
+  if (!session || !secret || session !== secret) {
     const loginUrl = new URL("/admin", request.url);
     return NextResponse.redirect(loginUrl);
   }

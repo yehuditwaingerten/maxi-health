@@ -1,34 +1,34 @@
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import StatusSelector from "./StatusSelector";
+import { STATUS_COLORS } from "@/app/admin/_shared/statusColors";
 
 type Props = { params: { id: string } };
 
 export const dynamic = "force-dynamic";
 
+const getOrder = cache((id: number) =>
+  prisma.order.findUnique({
+    where: { id },
+    include: { items: { include: { product: true } } },
+  })
+);
+
 export async function generateMetadata({ params }: Props) {
-  const order = await prisma.order.findUnique({ where: { id: Number(params.id) } });
+  const id = Number(params.id);
+  if (isNaN(id)) return {};
+  const order = await getOrder(id);
   if (!order) return {};
   return { title: `${order.reference} — Admin` };
 }
-
-const STATUS_COLORS: Record<string, string> = {
-  PENDING: "bg-yellow-100 text-yellow-700",
-  CONFIRMED: "bg-blue-100 text-blue-700",
-  DELIVERED: "bg-emerald-100 text-emerald-700",
-  CANCELLED: "bg-red-100 text-red-700",
-};
 
 export default async function AdminOrderDetailPage({ params }: Props) {
   const id = Number(params.id);
   if (isNaN(id)) notFound();
 
-  const order = await prisma.order.findUnique({
-    where: { id },
-    include: { items: { include: { product: true } } },
-  });
-
+  const order = await getOrder(id);
   if (!order) notFound();
 
   return (

@@ -5,11 +5,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useCartStore } from "@/store/cartStore";
 import { useRouter } from "next/navigation";
+import { useT } from "@/hooks/useT";
 
 const schema = z.object({
-  customerName: z.string().min(2, "Name is required"),
-  customerPhone: z.string().min(7, "Valid phone number is required"),
-  customerAddress: z.string().min(5, "Full address is required"),
+  customerName: z.string().min(2),
+  customerPhone: z.string().min(7),
+  customerAddress: z.string().min(5),
   notes: z.string().optional(),
 });
 
@@ -18,8 +19,9 @@ type FormValues = z.infer<typeof schema>;
 export default function CheckoutForm() {
   const router = useRouter();
   const items = useCartStore((s) => s.items);
-  const totalPrice = useCartStore((s) => s.totalPrice());
+  const totalPrice = useCartStore((s) => s.items.reduce((sum, i) => sum + i.price * i.quantity, 0));
   const clearCart = useCartStore((s) => s.clearCart);
+  const t = useT();
 
   const {
     register,
@@ -45,7 +47,7 @@ export default function CheckoutForm() {
     });
 
     if (!res.ok) {
-      setError("root", { message: "Something went wrong. Please try again." });
+      setError("root", { message: t.form.error });
       return;
     }
 
@@ -62,26 +64,29 @@ export default function CheckoutForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <div>
-        <label className={label}>Full name</label>
+        <label className={label}>{t.form.fullName}</label>
         <input {...register("customerName")} className={field} placeholder="ישראל ישראלי" />
-        {errors.customerName && <p className={err}>{errors.customerName.message}</p>}
+        {errors.customerName && <p className={err}>{t.form.nameRequired}</p>}
       </div>
 
       <div>
-        <label className={label}>Phone number</label>
+        <label className={label}>{t.form.phoneNumber}</label>
         <input {...register("customerPhone")} type="tel" className={field} placeholder="050-000-0000" />
-        {errors.customerPhone && <p className={err}>{errors.customerPhone.message}</p>}
+        {errors.customerPhone && <p className={err}>{t.form.phoneRequired}</p>}
       </div>
 
       <div>
-        <label className={label}>Delivery address</label>
+        <label className={label}>{t.form.deliveryAddress}</label>
         <input {...register("customerAddress")} className={field} placeholder="רחוב, עיר" />
-        {errors.customerAddress && <p className={err}>{errors.customerAddress.message}</p>}
+        {errors.customerAddress && <p className={err}>{t.form.addressRequired}</p>}
       </div>
 
       <div>
-        <label className={label}>Notes <span className="text-gray-400 font-normal">(optional)</span></label>
-        <textarea {...register("notes")} rows={3} className={field} placeholder="Floor, entrance code, etc." />
+        <label className={label}>
+          {t.form.notes}{" "}
+          <span className="text-gray-400 font-normal">{t.form.optional}</span>
+        </label>
+        <textarea {...register("notes")} rows={3} className={field} placeholder={t.form.notesPlaceholder} />
       </div>
 
       {errors.root && (
@@ -91,7 +96,7 @@ export default function CheckoutForm() {
       )}
 
       <div className="bg-gray-50 rounded-xl px-4 py-3 flex items-center justify-between text-sm">
-        <span className="text-gray-600">Total ({items.length} item{items.length !== 1 ? "s" : ""})</span>
+        <span className="text-gray-600">{t.form.totalLabel(items.length)}</span>
         <span className="font-bold text-gray-900 text-base">₪{totalPrice.toFixed(2)}</span>
       </div>
 
@@ -100,7 +105,7 @@ export default function CheckoutForm() {
         disabled={isSubmitting || items.length === 0}
         className="w-full bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
       >
-        {isSubmitting ? "Placing order…" : "Place order — Cash on delivery"}
+        {isSubmitting ? t.form.placingOrder : t.form.placeOrder}
       </button>
     </form>
   );

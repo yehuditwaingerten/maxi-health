@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCartStore } from "@/store/cartStore";
+import { useT } from "@/hooks/useT";
 
 type Props = {
   productId: number;
@@ -14,6 +15,7 @@ type Props = {
 export default function CartItem({ productId, name, imageUrl, price, quantity }: Props) {
   const updateQuantity = useCartStore((s) => s.updateQuantity);
   const removeItem = useCartStore((s) => s.removeItem);
+  const t = useT();
 
   return (
     <div className="flex items-center gap-4 py-4 border-b border-gray-100 last:border-0">
@@ -23,7 +25,7 @@ export default function CartItem({ productId, name, imageUrl, price, quantity }:
 
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-gray-800 truncate">{name}</p>
-        <p className="text-sm text-gray-500 mt-0.5">₪{price.toFixed(2)} each</p>
+        <p className="text-sm text-gray-500 mt-0.5">₪{price.toFixed(2)} {t.product.each}</p>
       </div>
 
       <div className="flex items-center gap-2 shrink-0">

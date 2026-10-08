@@ -1,16 +1,10 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import LogoutButton from "../LogoutButton";
+import { STATUS_COLORS } from "@/app/admin/_shared/statusColors";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Orders — Admin", robots: { index: false } };
-
-const STATUS_COLORS: Record<string, string> = {
-  PENDING: "bg-yellow-100 text-yellow-700",
-  CONFIRMED: "bg-blue-100 text-blue-700",
-  DELIVERED: "bg-emerald-100 text-emerald-700",
-  CANCELLED: "bg-red-100 text-red-700",
-};
 
 export default async function AdminOrdersPage() {
   const orders = await prisma.order.findMany({
