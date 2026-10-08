@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCartStore } from "@/store/cartStore";
+import { useT } from "@/hooks/useT";
 
 type Props = {
   id: number;
@@ -11,15 +12,22 @@ type Props = {
   price: number;
   imageUrl: string;
   category: string;
+  isNew?: boolean;
 };
 
-export default function ProductCard({ id, name, slug, price, imageUrl, category }: Props) {
+export default function ProductCard({ id, name, slug, price, imageUrl, category, isNew }: Props) {
   const addItem = useCartStore((s) => s.addItem);
+  const t = useT();
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col">
       <Link href={`/products/${slug}`} className="block overflow-hidden rounded-t-2xl">
         <div className="relative aspect-square w-full bg-gray-50">
+          {isNew && (
+            <span className="absolute top-2 left-2 z-10 bg-emerald-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+              חדש
+            </span>
+          )}
           <Image
             src={imageUrl}
             alt={name}
@@ -46,7 +54,7 @@ export default function ProductCard({ id, name, slug, price, imageUrl, category 
             onClick={() => addItem({ productId: id, name, imageUrl, price })}
             className="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-all"
           >
-            Add to cart
+            {t.product.addToCart}
           </button>
         </div>
       </div>

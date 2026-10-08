@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import LanguageSync from "@/components/LanguageSync";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -15,8 +16,16 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Maxi Health — Vitamins & Supplements",
+  title: {
+    default: "Maxi Health — Vitamins & Supplements",
+    template: "%s | Maxi Health",
+  },
   description: "Premium vitamins and supplements delivered to your door. Cash on delivery.",
+  openGraph: {
+    siteName: "Maxi Health",
+    type: "website",
+    locale: "he_IL",
+  },
 };
 
 export default function RootLayout({
@@ -27,6 +36,7 @@ export default function RootLayout({
   return (
     <html lang="he">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 min-h-screen`}>
+        <LanguageSync />
         <Navbar />
         <main>{children}</main>
       </body>

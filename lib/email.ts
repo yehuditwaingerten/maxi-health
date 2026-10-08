@@ -45,10 +45,14 @@ Payment: Cash on Delivery
 Please prepare and deliver the above items.
 `.trim();
 
-  await transporter.sendMail({
-    from: `"Maxi Health" <${env.GMAIL_USER}>`,
-    to: env.OWNER_EMAIL,
-    subject: `New Order ${order.reference} — Maxi Health`,
-    text: body,
-  });
+  try {
+    await transporter.sendMail({
+      from: `"Maxi Health" <${env.GMAIL_USER}>`,
+      to: env.OWNER_EMAIL,
+      subject: `New Order ${order.reference} — Maxi Health`,
+      text: body,
+    });
+  } catch (err) {
+    console.error(`[email] Failed to send notification for order ${order.reference}:`, err);
+  }
 }

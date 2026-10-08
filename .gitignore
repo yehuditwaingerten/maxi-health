@@ -31,3 +31,9 @@ npm-debug.log*
 .idea/
 
 /app/generated/prisma
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# Scratch files
+pr_body.txt

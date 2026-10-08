@@ -1,16 +1,10 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import LogoutButton from "../LogoutButton";
+import { STATUS_COLORS } from "@/app/admin/_shared/statusColors";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Orders — Admin" };
-
-const STATUS_COLORS: Record<string, string> = {
-  PENDING: "bg-yellow-100 text-yellow-700",
-  CONFIRMED: "bg-blue-100 text-blue-700",
-  DELIVERED: "bg-emerald-100 text-emerald-700",
-  CANCELLED: "bg-red-100 text-red-700",
-};
+export const metadata = { title: "Orders — Admin", robots: { index: false } };
 
 export default async function AdminOrdersPage() {
   const orders = await prisma.order.findMany({
@@ -31,8 +25,8 @@ export default async function AdminOrdersPage() {
       {orders.length === 0 ? (
         <p className="text-gray-500 text-sm">No orders yet.</p>
       ) : (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-x-auto">
+          <table className="w-full text-sm min-w-[600px]">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
                 <th className="text-left px-4 py-3 font-semibold text-gray-600">Reference</th>
